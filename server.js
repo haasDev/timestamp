@@ -3,13 +3,17 @@ const koa = require('koa');
 const app = koa();
 
 app.use(function *(){
+	let date;
+	let formattedString;
 	const reqString = this.request.url.substr(1);
 	if (/%20/.test(reqString)) {
-		const formattedString = reqString.replace(/%20/g, ' ');
+		formattedString = reqString.replace(/%20/g, ' ');
 	}
-	const date = new Date(formattedString || reqString);
-	const unix = date.getTime();
-	const standard = date.toDateString();
+
+	(reqString == +reqString) ? date = new Date(+reqString) : date = new Date(formattedString);
+
+	const unix = date.getTime() || null;
+	const standard = +date < 1 ? null : date.toDateString();
 	this.body = JSON.stringify({unix, standard});
 });
 
