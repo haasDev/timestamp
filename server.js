@@ -12,8 +12,9 @@ app.use(function *(){
 
 	(reqString == +reqString) ? date = new Date(+reqString) : date = new Date(formattedString);
 
+	const validDate = Object.prototype.toString.call(date) === "[object Date]" && isNaN(date.getTime());
 	const unix = date.getTime() || null;
-	const standard = +date < 1 ? null : date.toDateString();
+	const standard = validDate ? null : date.toDateString();
 	this.body = JSON.stringify({unix, standard});
 });
 
